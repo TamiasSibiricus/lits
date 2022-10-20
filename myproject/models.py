@@ -5,7 +5,7 @@ class Reporter(models.Model):
     lastname = models.CharField(max_length=70, default='')
 
     def __str__(self):
-        return self.full_name
+        return f"{self.firstname} {self.lastname}"
 
 class License(models.Model):
     number = models.CharField(max_length=200)
