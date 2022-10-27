@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+<div class="blog-post">
+  <h1 class="blog-post-title">{{ article.title }}</h2>
+  <p class="blog-post-meta">{{ article.published_at }} by <a href="#">{{ article.reporter }}</a></p>
+  <p>{{ article.headline }}</p>
+  <img class="img-fluid w-100" data-src="holder.js/400x320?theme=thumb" alt="Card image cap">
+  <hr>
+  <p>{{ article.content }}</p>
+</div><!-- /.blog-post -->
+{% endblock %}

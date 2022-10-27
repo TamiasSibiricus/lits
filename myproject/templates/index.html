@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+{% if latest_articles_list %}
+  {% for article in latest_articles_list %}
+  <div class="card flex-md-row mb-4 box-shadow">
+    <div class="card-body d-flex flex-column align-items-start">
+      <strong class="d-inline-block mb-2 text-primary">
+        {% for tag in article.tags.all %}{{ tag.name }} {% endfor %}
+      </strong>
+      <h3 class="mb-0">
+        <a class="text-dark" href="/articles/{{ article.id }}/">{{ article.title }}</a>
+        <!-- <a class="text-dark" href="{% url 'article' article.pk %}">{{ article.title }}</a> -->
+      </h3>
+      <div class="mb-1 text-muted">{{ article.published_at }}</div>
+      <p class="card-text mb-auto">{{ article.headline }}</p>
+      <a class="btn btn-link" href="/articles/{{ article.id }}/">Continue reading</a>
+    </div>
+    <img class="card-img-right flex-auto d-none d-md-block" data-src="holder.js/200x250?theme=thumb" alt="Card image cap">
+  </div>
+  {% endfor %}
+{% else %}
+  <p>There is no any articles yet.</p>
+{% endif %}
+
+{% endblock %}

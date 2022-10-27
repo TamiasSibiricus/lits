@@ -1,9 +1,11 @@
 from django.contrib import admin
-from .models import Reporter, Tag, License, Article
+from .models import (Reporter, Tag, License, Article,
+                     Comment)
+
 
 @admin.register(Reporter)
 class ReporterAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('id', 'firstname', 'lastname', 'license',)
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
@@ -15,4 +17,9 @@ class LicenseAdmin(admin.ModelAdmin):
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'created_at', 'published_at',)
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
     pass
+

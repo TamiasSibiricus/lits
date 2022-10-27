@@ -15,7 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from myproject import views 
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+    path('', views.index, name='index'),
+    path('articles/<int:article_id>/', views.article, name='article')
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+'''
+# generic views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', views.IndexView.as_view(), name='index'),
+    path('articles/<int:pk>/', views.ArticleView.as_view(), name='article_by_pk'),
+    path('articles/<str:slug>/', views.ArticleView.as_view(), name='article_by_slug')
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+'''
