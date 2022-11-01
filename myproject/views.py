@@ -9,7 +9,7 @@ from .models import Article, Tag, Reporter, Comment
 def homepage(request):
     # Get some articles from
     latest_articles_list = Article.objects.select_related('reporter').prefetch_related('tags').order_by('-published_at')[:5]
-    return render(request, 'index.html', {'latest_articles_list': latest_articles_list})
+    return render(request, 'homepage.html', {'latest_articles_list': latest_articles_list})
 
 
 class TagView(generic.ListView):
@@ -25,6 +25,7 @@ class TagView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published articles."""
+        # TODO: make slug always lowercase
         slug = self.kwargs.get('slug')
         return Article.objects.select_related(
                 'reporter'
@@ -79,7 +80,13 @@ class ArticleView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         #context['comments'] = Comment.objects.filter(article=self.get_object())[0:20]
-        context['comments'] = Comment.objects.filter(article=self.get_object()).filter(aproved=True)[0:20]
+        context['comments'] = Comment.objects.filter(
+                article=self.get_object()
+            ).order_by(
+                '-created_at'
+            ).filter(
+                aproved=True
+            )[0:20]
         return context
 
 def add_comment(request, slug):

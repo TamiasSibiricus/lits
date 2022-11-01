@@ -23,7 +23,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
     @admin.display(description='Title with reporter')
     def title_with_reporter(self, obj):
-        return ("%s (%s)" % (obj.title, obj.reporter))
+        return ("%s (%s %s)" % (obj.title, obj.reporter.firstname, obj.reporter.lastname))
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
