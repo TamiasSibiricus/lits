@@ -6,9 +6,54 @@
 <div class="blog-post">
   <h1 class="blog-post-title">{{ article.title }}</h2>
   <p class="blog-post-meta">{{ article.published_at }} by <a href="#">{{ article.reporter }}</a></p>
+  <strong class="d-inline-block mb-2 text-primary">
+    {% for tag in article.tags.all %}<a href="{% url "tag" tag.name %}">{{ tag.name|capfirst }}</a> {% endfor %}
+  </strong>
   <p>{{ article.headline }}</p>
   <img class="img-fluid w-100" data-src="holder.js/400x320?theme=thumb" alt="Card image cap">
   <hr>
   <p>{{ article.content }}</p>
 </div><!-- /.blog-post -->
+
+<div class="my-3">
+  <h4>Leave a comment here</h4>
+  <form action="{% url 'article_comment' article.slug %}" method="post">
+    {% csrf_token %}
+    {% if error_message %}<div class="alert alert-danger" role="alert">{{ error_message }}</div>{% endif %}
+    <fieldset>
+      <div class="form-group">
+        <label for="username">Your name</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Cool User Name"{% if username %} value="{{ username }}"{% endif %}>
+      </div>
+      <div class="form-group">
+        <label for="content">Comment</label>
+        <textarea class="form-control" id="content" name="content" rows="3" placeholder="Creative toughts here">{% if username %}{{ content }}{% endif %}</textarea>
+      </div>
+    </fieldset>
+    <input type="submit" value="Add comment">
+  </form>
+</div>
+
+{% if comments %}
+<h4>Comments ({{ comments|length }})</h4>
+<div class="row">
+  <div class="col-8">
+    {% for comment in comments %}
+      <div class="card card-white post mt-1 mb-2">
+        <div class="post-heading px-3 py-1">
+          <div class="float-left meta">
+            <div class="title h5">
+              <b>{% if comment.user %}{{ comment.user }}{% else %}{{ comment.username }}{% endif %}</b> <small>made a comment.</small>
+            </div>
+            <h6 class="text-muted time">{{ comment.created_at }}</h6>
+          </div>
+        </div>
+        <div class="post-description px-3 py-1">
+          <p>{{ comment.content }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
 {% endblock %}

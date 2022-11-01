@@ -1,0 +1,12 @@
+<h4 class="font-italic">Our authors</h4>
+<ol class="list-unstyled mb-0">
+  {% for reporter in reporters %}
+  <li>
+    {% with reporter_full_name=reporter.firstname|add:" "|add:reporter.lastname %}
+    <a href="{% url 'reporter' reporter_full_name|slugify %}">
+      {{ reporter.firstname|capfirst }} {{ reporter.lastname|capfirst }}
+    </a>
+    {% endwith %}
+  </li>
+  {% endfor %}
+</ol>

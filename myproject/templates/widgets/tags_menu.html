@@ -1,0 +1,5 @@
+<nav class="nav d-flex justify-content-between">
+  {% for tag in tags %}
+  <a class="p-2 text-muted" href="{% url "tag" tag.name %}">{{ tag.name|capfirst }}</a>
+  {% endfor %}
+</nav>
