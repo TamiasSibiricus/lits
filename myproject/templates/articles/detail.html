@@ -15,6 +15,7 @@
   <p>{{ article.content }}</p>
 </div><!-- /.blog-post -->
 
+{% if user.is_authenticated %}
 <div class="my-3">
   <h4>Leave a comment here</h4>
   <form action="{% url 'article_comment' article.slug %}" method="post">
@@ -33,6 +34,15 @@
     <input type="submit" value="Add comment">
   </form>
 </div>
+{% else %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="alert alert-light" role="alert">
+      You must be registered user to leave comments.
+      <a href="{% url "login" %}">Login</a> or <a href="{% url "account_register" %}">register</a> please</div>
+  </div>
+</div>
+{% endif %}
 
 {% if comments %}
 <h4>Comments ({{ comments|length }})</h4>

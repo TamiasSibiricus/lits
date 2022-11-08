@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <ol class="list-unstyled">
+      <li><strong>Firstname:</strong>{{ user.userprofile.firstname }}</li>
+      <li><strong>Lastname:</strong>{{ user.userprofile.lastname }}</li>
+      <li><strong>Birth date:</strong>{{ user.userprofile.birth_date }}</li>
+    </ol>
+  </div>
+</div>
+{% endblock %}

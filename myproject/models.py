@@ -1,6 +1,12 @@
 from django.conf import settings
 from django.db import models
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL)
+    firstname = models.CharField(max_length=70, default='')
+    lastname = models.CharField(max_length=70, default='')
+    birth_date = models.DateField()
+
 class Reporter(models.Model):
     firstname = models.CharField(max_length=70, default='')
     lastname = models.CharField(max_length=70, default='')
@@ -30,7 +36,7 @@ class Article(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    published_at = models.DateField()
+    published_at = models.DateTimeField()
 
     def __str__(self):
         return self.headline
@@ -42,6 +48,10 @@ class Comment(models.Model):
     content = models.TextField()
     aproved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # WARNING! After permission add or change makemigration and migrate required
+        permissions = (("can_comment", "Can leave comment for article"),)
 
     def __str__(self):
         return self.content

@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 text-right">
+    <div class="d-flex flex-column justify-content-center flex-sm-row justify-content-sm-between">
+      <a class="btn btn-link" href="{% url 'account_register' %}">Create account</a>
+      <a class="btn btn-link" href="{% url 'login' %}">Login again?</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

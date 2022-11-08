@@ -1,0 +1,42 @@
+{% extends "base_generic.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+{% if form.errors %}
+<div class="alert alert-danger" role="alert">Your username and password didn't match. Please try again.</div>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+    {% else %}
+    <p>Please login to see this page.</p>
+    {% endif %}
+{% endif %}
+
+<div class="row">
+  <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 mb-4">
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      <fieldset>
+        {{ form.username|as_crispy_field }}
+        {{ form.password|as_crispy_field }}
+      </fieldset>
+      <input type="hidden" name="next" value="{{ next }}">
+      <div class="text-center">
+        <input class="btn btn-primary" type="submit" value="Login">
+      </div>
+    </form>
+  </div>
+  <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 text-right">
+    <div class="d-flex flex-column justify-content-center flex-sm-row justify-content-sm-between">
+      <a class="btn btn-link" href="{% url 'account_register' %}">Create account</a>
+      <a class="btn btn-link" href="{% url 'password_reset' %}">Lost password?</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

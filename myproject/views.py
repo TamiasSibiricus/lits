@@ -1,15 +1,38 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import loader
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from django.urls import reverse
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.decorators import permission_required, login_required
 
-from .models import Article, Tag, Reporter, Comment
+from .models import Article, Tag, Reporter, Comment, UserProfile
+from .forms import UserProfileCreationForm
 
 def homepage(request):
     # Get some articles from
     latest_articles_list = Article.objects.select_related('reporter').prefetch_related('tags').order_by('-published_at')[:5]
     return render(request, 'homepage.html', {'latest_articles_list': latest_articles_list})
+
+
+def register(request):
+	if request.method == "POST":
+		form = UserProfileCreationForm(request.POST)
+		if form.is_valid():
+			user = form.save()
+			login(request, user)
+			messages.success(request, "Registration successful." )
+			return redirect("homepage")
+		messages.error(request, "Unsuccessful registration. Invalid information.")
+	form = UserProfileCreationForm()
+	return render(request=request, template_name="registration/register.html", context={"form":form})
+
+@login_required
+def profile(request):
+    # username: tester     password: d06ROiRD3Io0yIb4
+	return render(request=request, template_name="accounts/detail.html")
 
 
 class TagView(generic.ListView):
@@ -89,6 +112,8 @@ class ArticleView(generic.DetailView):
             )[0:20]
         return context
 
+# Warning! endpoint will require all access permission described in argument
+@permission_required(('myproject.add_comment', 'myproject.can_comment'))
 def add_comment(request, slug):
     article = get_object_or_404(Article, slug=slug)
 
