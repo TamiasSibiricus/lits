@@ -2,7 +2,13 @@ from django.conf import settings
 from django.db import models
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='profile'
+    )
     firstname = models.CharField(max_length=70, default='')
     lastname = models.CharField(max_length=70, default='')
     birth_date = models.DateField()
@@ -28,8 +34,8 @@ class Tag(models.Model):
         return self.name
 
 class Article(models.Model):
-    reporter = models.ForeignKey(Reporter, on_delete=models.CASCADE)
-    tags = models.ManyToManyField(Tag)
+    reporter = models.ForeignKey(Reporter, on_delete=models.CASCADE, related_name='articles')
+    tags = models.ManyToManyField(Tag, related_name='tags')
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200)
     headline = models.CharField(max_length=256, null=True)
@@ -42,8 +48,13 @@ class Article(models.Model):
         return self.headline
 
 class Comment(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL
+    )
     username = models.CharField(max_length=200, blank=True, null=True)
     content = models.TextField()
     aproved = models.BooleanField(default=False)

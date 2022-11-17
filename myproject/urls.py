@@ -21,9 +21,26 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 
 
+from django.urls import include, path
+from rest_framework import routers
+from myproject import views_api
+
+# REST routing here
+router = routers.DefaultRouter()
+router.register(r'articles', views_api.ArticleViewSet)
+router.register(r'reporters', views_api.ReporterViewSet)
+router.register(r'tags', views_api.TagViewSet)
+router.register(r'users', views_api.UserViewSet)
+router.register(r'groups', views_api.GroupViewSet)
+
 # generic views
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # Wire up our API using automatic URL routing.
+    # Additionally, we include login URLs for the browsable API.
+    path('api/', include(router.urls)),
+    path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # regular html
     path('', views.homepage, name='homepage'),
     path('articles/<str:slug>/', views.ArticleView.as_view(), name='article'),
     path('articles/<str:slug>/comment', views.add_comment, name='article_comment'),

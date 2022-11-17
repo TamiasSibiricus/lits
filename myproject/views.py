@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import permission_required, login_required
 from .models import Article, Tag, Reporter, Comment, UserProfile
 from .forms import UserProfileCreationForm
 
+
 def homepage(request):
     # Get some articles from
     latest_articles_list = Article.objects.select_related('reporter').prefetch_related('tags').order_by('-published_at')[:5]

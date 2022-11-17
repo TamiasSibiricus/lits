@@ -1,2 +1,7 @@
 django==3.2.16
+django-extensions==3.2.1
 django-crispy-forms==1.14.0
+django-cors-headers==3.13.0
+django-filter==22.1
+djangorestframework==3.14.0
+djangorestframework-filters==1.0.0.dev2
