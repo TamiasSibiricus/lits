@@ -4,4 +4,5 @@ django-crispy-forms==1.14.0
 django-cors-headers==3.13.0
 django-filter==22.1
 djangorestframework==3.14.0
+djangorestframework-simplejwt[crypto]==5.2.2
 djangorestframework-filters==1.0.0.dev2

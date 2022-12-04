@@ -13,9 +13,15 @@ class UserProfile(models.Model):
     lastname = models.CharField(max_length=70, default='')
     birth_date = models.DateField()
 
+
 class Reporter(models.Model):
     firstname = models.CharField(max_length=70, default='')
     lastname = models.CharField(max_length=70, default='')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['firstname', 'lastname'], name='unique_reporter')
+        ]
 
     def __str__(self):
         return f"{self.firstname} {self.lastname}"
@@ -37,7 +43,7 @@ class Article(models.Model):
     reporter = models.ForeignKey(Reporter, on_delete=models.CASCADE, related_name='articles')
     tags = models.ManyToManyField(Tag, related_name='tags')
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True)
     headline = models.CharField(max_length=256, null=True)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
