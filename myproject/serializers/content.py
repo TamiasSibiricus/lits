@@ -1,9 +1,10 @@
+import re
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
-
+from rest_framework.validators import UniqueValidator
 from ..models import Article, Reporter, Tag
-
+from ..validators import alpha_only, AlphaOnlyValidator
 
 class ReporterSerializer(serializers.HyperlinkedModelSerializer):
     articles = serializers.HyperlinkedRelatedField(
@@ -28,6 +29,16 @@ class TagListField(serializers.RelatedField):
 
 
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
+    title = serializers.CharField(max_length=200)
+    slug = serializers.SlugField(max_length=200)
+    #slug = serializers.SlugField(
+    #    max_length=200,
+    #    validators=[
+    #        alpha_only,
+    #        #AlphaOnlyValidator('something'),
+    #        UniqueValidator(queryset=Article.objects.all())
+    #    ]
+    #)
     tags = TagListField(many=True)
     reporter = ReporterSerializer(many=False)
     published_at = serializers.DateTimeField()
@@ -36,6 +47,11 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
         model = Article
         fields = ['url', 'id', 'title', 'slug', 'headline', 'content', 'published_at', 'tags', 'reporter']
 
+    def validate_slug(self, value):
+        slug_re = re.compile(r'^[-a-zA-Z_]+$')
+        if not slug_re.match(value):
+            raise serializers.ValidationError('Not an alphabet slug. Digits not allowed by field validation')
+        return value
 
 class ArticleCreateUpdateSerializer(ArticleSerializer):
     reporter = serializers.PrimaryKeyRelatedField(

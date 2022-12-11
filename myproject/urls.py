@@ -46,6 +46,9 @@ urlpatterns = [
     path('api/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('api/auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('api/export/articles/', views_api.ArticlesExportView.as_view(), name='articles_export'),
+    #path('api/export/articles/', views_api.articles_export, name='articles_export'),
     # regular html
     path('', views.homepage, name='homepage'),
     path('articles/<str:slug>/', views.ArticleView.as_view(), name='article'),
